@@ -1,36 +1,10 @@
 pybullet build time: Jan  9 2023 08:55:26
-Version = 4.1 ATI-4.8.15
-Vendor = ATI Technologies Inc.
-Renderer = AMD Radeon Pro 5500M OpenGL Engine
-b3Printf: Selected demo: Physics Server
-startThreads creating 1 threads.
-starting thread 0
-started thread 0 
-MotionThreadFunc thread started
-b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
-
-b3Printf: expected a world element, continuing without it.
-Traceback (most recent call last):
+b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+expected a world element, continuing without it.Traceback (most recent call last):
   File "/Users/rhodesfotopulos/Documents/GitHub/Artifical_life/simulate.py", line 8, in <module>
     simulation.Run()
-  File "/Users/rhodesfotopulos/Documents/GitHub/Artifical_life/simulation.py", line 32, in Run
-    self.robot.Sense(i)
-  File "/Users/rhodesfotopulos/Documents/GitHub/Artifical_life/robot.py", line 29, in Sense
-    self.sensors[sensor_name].Get_Value(i)
-  File "/Users/rhodesfotopulos/Documents/GitHub/Artifical_life/sensor.py", line 12, in Get_Value
-    self.values[i] = pyrosim.Get_Touch_Sensor_Value_For_Link(self.linkName)
-  File "/Users/rhodesfotopulos/Documents/GitHub/Artifical_life/pyrosim/pyrosim.py", line 53, in Get_Touch_Sensor_Value_For_Link
-    for pt in pts:
-TypeError: 'NoneType' object is not iterable
-Exception ignored in: <function SIMULATION.__del__ at 0x7f8c70892e50>
-Traceback (most recent call last):
-  File "/Users/rhodesfotopulos/Documents/GitHub/Artifical_life/simulation.py", line 40, in __del__
-pybullet.error: Not connected to physics server.
-numActiveThreads = 0
-stopping threads
-Thread with taskId 0 exiting
-Thread TERMINATED
-destroy semaphore
-semaphore destroyed
-destroy main semaphore
-main semaphore destroyed
+  File "/Users/rhodesfotopulos/Documents/GitHub/Artifical_life/simulation.py", line 34, in Run
+    self.robot.Act()
+  File "/Users/rhodesfotopulos/Documents/GitHub/Artifical_life/robot.py", line 43, in Act
+    self.motors[jointName.encode("utf-8")].Set_Value(desiredAngle, self.robotId)
+KeyError: b'Torso_BackLeg'

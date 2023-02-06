@@ -96,7 +96,7 @@ def Prepare_Joint_Dictionary(bodyID):
 
         jointInfo = p.getJointInfo( bodyID , jointIndex )
 
-        jointName = jointInfo[1]
+        jointName = jointInfo[1].decode('UTF-8')
 
         jointNamesToIndices[jointName] = jointIndex
 
@@ -134,11 +134,11 @@ def Send_Cube(name="default",pos=[0,0,0],size=[1,1,1]):
 
     availableLinkIndex = availableLinkIndex + 1
 
-def Send_Joint(name,parent,child,type,position):
+def Send_Joint(name,parent,child,type,position, jointAxis):
 
     joint = JOINT(name,parent,child,type,position)
 
-    joint.Save(f)
+    joint.Save(f, jointAxis)
 
 def Send_Motor_Neuron(name,jointName):
 
