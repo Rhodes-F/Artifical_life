@@ -54,7 +54,7 @@ class PARALLEL_HILL_CLIMBER:
 
     def Select(self):
         for key in self.children:
-            if self.parents[key].Get_Fitness() > self.children[key].Get_Fitness():
+            if self.parents[key].Get_Fitness() < self.children[key].Get_Fitness():
                 self.parents[key] = self.children[key]
 
     def Print(self):
@@ -65,10 +65,10 @@ class PARALLEL_HILL_CLIMBER:
 
     def Show_Best(self):
         best_parent_key = "None"
-        best_fitness = 1000000
+        best_fitness = -1000000
         for key in self.parents:
             parent_fitness = self.parents[key].Get_Fitness()
-            if parent_fitness < best_fitness:
+            if parent_fitness > best_fitness:
                 best_fitness = parent_fitness
                 best_parent_key = key
 

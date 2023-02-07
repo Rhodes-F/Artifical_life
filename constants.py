@@ -19,4 +19,10 @@ SLEEP_TIME = 0.005
 
 NUM_GENERATIONS = 10
 
-POPULATION_SIZE = 10
+POPULATION_SIZE = 30
+
+
+numSensorNeurons = 6
+numMotorNeurons = 5
+
+motorJointRange = .4
