@@ -9,7 +9,9 @@ class SOLUTION:
 
     def __init__(self, nextAvailableID):
         self.myID = nextAvailableID
-        self.weights = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)*2-1
+        self.weights = np.random.rand(100,100)*2-1
+        self.sensors = []
+        self.joints = []
 
     def Start_Simulation(self, directOrGUI):
         self.Create_Body()
@@ -46,48 +48,56 @@ class SOLUTION:
         # pyrosim.End()     
 
     def Create_Body(self):
-        length, width, height = 1, 1, 1
+        start_heigth= random.random()*c.MAX_SIZE+c.MIN_SIZE
+        start_y = random.random()*c.MAX_SIZE+c.MIN_SIZE
         pyrosim.Start_URDF("body.urdf")
-        pyrosim.Send_Cube(name="Torso", pos=[0, 0, 3] , size=[1, 1, 1])
-            
-        pyrosim.Send_Joint(name = "Torso_Leg", parent= "Torso", child = "Leg", type = "revolute", position = [0, 0, 2.5],jointAxis = "0 1 0")
-        pyrosim.Send_Cube(name="Leg", pos=[0, 0, -1] , size=[.3, .3, 2])
-
-        pyrosim.Send_Joint(name = "Torso_FrontArm", parent= "Torso", child = "FrontArm", type = "revolute", position = [0.5, 0, 3],jointAxis = "0 1 0")
-        pyrosim.Send_Cube(name="FrontArm", pos=[0, 0, -0.5] , size=[.3, .3, 1])
-
-        pyrosim.Send_Joint(name = "Torso_BackArm", parent= "Torso", child = "BackArm", type = "revolute", position = [-0.5, 0, 3],jointAxis = "0 1 0")
-        pyrosim.Send_Cube(name="BackArm", pos=[0, 0, -0.5] , size=[.3, .3, 1])
-
-        pyrosim.Send_Joint(name = "Torso_RightArm", parent= "Torso", child = "RightArm", type = "revolute", position = [0,-.5, 3],jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="RightArm", pos=[0, 0, -0.5] , size=[.3, .3, 1])
-
-        pyrosim.Send_Joint(name = "Torso_LeftArm", parent= "Torso", child = "LeftArm", type = "revolute", position = [0, .5, 3],jointAxis = "1 0 0")
-        pyrosim.Send_Cube(name="LeftArm", pos=[0, 0, -0.5] , size=[.3, .3, 1])
+        color_name = "Blue"
+        rgb = [0,0,1]
+        if random.randint(0,1) == 1:
+            self.sensors.append("0")
+            color_name = "Green"
+            rgb = [0,1,0]
+        pyrosim.Send_Cube(name="0", pos=[0, 0, start_heigth/2] , 
+        size=[random.random()*c.MAX_SIZE+c.MIN_SIZE, start_y, start_heigth ], color_name=color_name, rgb=rgb)
+        
+        end_pos = start_y/2
+        lasty = 0
+        links = random.randint(1,c.NUM_LINKS)
+        for i in range(links):
+            color_name = "Blue"
+            rgb = [0,0,1]
+            length, width, height = random.random()*c.MAX_SIZE+c.MIN_SIZE,random.random()*c.MAX_SIZE+c.MIN_SIZE,random.random()*c.MAX_SIZE+c.MIN_SIZE
+            if random.randint(0,1) == 1:
+                self.sensors.append(str(i+1))
+                color_name = "Green"   
+                rgb = [0,1,0]
+            joint = str(i)+"_"+str(i+1)
+            self.joints.append(joint)
+            pyrosim.Send_Joint(name = joint, parent= str(i), child = str(i+1), type = "revolute", position = [0, end_pos,height/2 - lasty/2],jointAxis = "1 0 0")
+            pyrosim.Send_Cube(name=str(i+1), pos=[0, width/2, 0], size=[length, width, height], color_name=color_name, rgb=rgb)
+            end_pos = width
+            lasty = height
 
         pyrosim.End()
 
     def Create_Brain(self):
         pyrosim.Start_NeuralNetwork("brain" + str(self.myID) + ".nndf")
 
-        # Create sensor neurons
-        pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "Torso")
-        pyrosim.Send_Sensor_Neuron(name = 1 , linkName = "Leg")
-        pyrosim.Send_Sensor_Neuron(name = 2 , linkName = "FrontArm")
-        pyrosim.Send_Sensor_Neuron(name = 3 , linkName = "BackArm")
-        pyrosim.Send_Sensor_Neuron(name = 4 , linkName = "RightArm")
-        pyrosim.Send_Sensor_Neuron(name = 5 , linkName = "LeftArm")
+        for i in range(len(self.sensors)):
+            pyrosim.Send_Sensor_Neuron(name = i, linkName = self.sensors[i])
+    
+        for i in range(len(self.joints)):
+            pyrosim.Send_Motor_Neuron(name = i+len(self.sensors), jointName = self.joints[i])
+        
+        for i in range(len(self.sensors)):
+            for j in range(len(self.joints)):
+                pyrosim.Send_Synapse(sourceNeuronName = i,
+                                    targetNeuronName = j+len(self.sensors), 
+                                    weight = self.weights[i][j])      
 
-        # Create motor neurons
-        pyrosim.Send_Motor_Neuron(name = 6 , jointName = "Torso_Leg")
-        pyrosim.Send_Motor_Neuron(name = 7 , jointName = "Torso_FrontArm")
-        pyrosim.Send_Motor_Neuron(name = 8 , jointName = "Torso_BackArm")
-        pyrosim.Send_Motor_Neuron(name = 9 , jointName = "Torso_RightArm")
-        pyrosim.Send_Motor_Neuron(name = 10 , jointName = "Torso_LeftArm")
-
-        for currentRow in range(c.numSensorNeurons):
-            for currentColumn in range(c.numMotorNeurons):
-                pyrosim.Send_Synapse(sourceNeuronName = currentRow,
-                                    targetNeuronName = currentColumn+c.numSensorNeurons, 
-                                    weight = self.weights[currentRow][currentColumn])
+        # for currentRow in range(c.numSensorNeurons):
+        #     for currentColumn in range(c.numMotorNeurons):
+        #         pyrosim.Send_Synapse(sourceNeuronName = currentRow,
+        #                             targetNeuronName = currentColumn+c.numSensorNeurons, 
+        #                             weight = self.weights[currentRow][currentColumn])
         pyrosim.End()

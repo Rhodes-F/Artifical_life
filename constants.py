@@ -17,12 +17,17 @@ MAXFORCE = 80
 
 SLEEP_TIME = 0.005
 
-NUM_GENERATIONS = 10
+NUM_GENERATIONS = 1
 
-POPULATION_SIZE = 30
+POPULATION_SIZE = 1
 
 
 numSensorNeurons = 6
 numMotorNeurons = 5
 
 motorJointRange = .4
+
+# assignment 6
+NUM_LINKS = 5 
+MAX_SIZE = 1 
+MIN_SIZE = .01
