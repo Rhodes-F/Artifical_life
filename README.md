@@ -1,9 +1,9 @@
 ## Assignment 7
 
-#####Running the code
+#### Running the code
 Inorder to run this code first please clone the repository and enter the assignment7 branch. Then run main.py which will install the requirements and then run the search algorithm. The current search is set to run for 1 generation with a population size of 1 and have a maximum number of links of 10 with a max size being 1 and a min being .01 but this can be reconfigured in constants.py
 
-####Assignment info 
+#### Assignment info 
 This project is part of CS 396-Artificial life at Northwestern Universiy. It began as a Ludobots project which is a reddit course that can be found [here](https://www.reddit.com/r/ludobots/) and uses pyrosim physics simulator to make the world environment and determine the interactions in the world. 
 
 This assignment was to create a 3D  creature which I have done. Green boxes denote sensors and blue denotes sensorless boxes. 
