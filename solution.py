@@ -5,6 +5,8 @@ import random
 import time
 import constants as c
 
+
+
 class SOLUTION:
 
     def __init__(self, nextAvailableID):
@@ -12,6 +14,7 @@ class SOLUTION:
         self.weights = np.random.rand(100,100)*2-1
         self.sensors = []
         self.joints = []
+        self.nodes = []
 
     def Start_Simulation(self, directOrGUI):
         self.Create_Body()
@@ -50,7 +53,9 @@ class SOLUTION:
     def Create_Body(self):
         start_heigth= random.random()*c.MAX_SIZE+c.MIN_SIZE
         start_y = random.random()*c.MAX_SIZE+c.MIN_SIZE
+        start_x = random.random()*c.MAX_SIZE+c.MIN_SIZE
         pyrosim.Start_URDF("body.urdf")
+
         color_name = "Blue"
         rgb = [0,0,1]
         if random.randint(0,1) == 1:
@@ -58,25 +63,13 @@ class SOLUTION:
             color_name = "Green"
             rgb = [0,1,0]
         pyrosim.Send_Cube(name="0", pos=[0, 0, start_heigth/2] , 
-        size=[random.random()*c.MAX_SIZE+c.MIN_SIZE, start_y, start_heigth ], color_name=color_name, rgb=rgb)
+        size=[start_x, start_y, start_heigth ], color_name=color_name, rgb=rgb)
         
-        end_pos = start_y/2
-        lasty = 0
         links = random.randint(1,c.NUM_LINKS)
-        for i in range(links):
-            color_name = "Blue"
-            rgb = [0,0,1]
-            length, width, height = random.random()*c.MAX_SIZE+c.MIN_SIZE,random.random()*c.MAX_SIZE+c.MIN_SIZE,random.random()*c.MAX_SIZE+c.MIN_SIZE
-            if random.randint(0,1) == 1:
-                self.sensors.append(str(i+1))
-                color_name = "Green"   
-                rgb = [0,1,0]
-            joint = str(i)+"_"+str(i+1)
-            self.joints.append(joint)
-            pyrosim.Send_Joint(name = joint, parent= str(i), child = str(i+1), type = "revolute", position = [0, end_pos,height/2 - lasty/2],jointAxis = "1 0 0")
-            pyrosim.Send_Cube(name=str(i+1), pos=[0, width/2, 0], size=[length, width, height], color_name=color_name, rgb=rgb)
-            end_pos = width
-            lasty = height
+        self.nodes.append([0,start_x, start_y, start_heigth,[0,0,0]])
+
+        for i in range(10):
+            self.make_node()
 
         pyrosim.End()
 
@@ -95,9 +88,61 @@ class SOLUTION:
                                     targetNeuronName = j+len(self.sensors), 
                                     weight = self.weights[i][j])      
 
-        # for currentRow in range(c.numSensorNeurons):
-        #     for currentColumn in range(c.numMotorNeurons):
-        #         pyrosim.Send_Synapse(sourceNeuronName = currentRow,
-        #                             targetNeuronName = currentColumn+c.numSensorNeurons, 
-        #                             weight = self.weights[currentRow][currentColumn])
         pyrosim.End()
+
+    def make_node(self):
+        node  = self.nodes.pop()
+        name = node[0]
+
+        color_name = "Blue"
+        rgb = [0,0,1]
+        length, width, height = random.random()*c.MAX_SIZE+c.MIN_SIZE,random.random()*c.MAX_SIZE+c.MIN_SIZE,random.random()*c.MAX_SIZE+c.MIN_SIZE
+        if random.randint(0,1) == 1:
+            self.sensors.append(str(name+1))
+            color_name = "Green"   
+            rgb = [0,1,0]
+        joint = str(name)+"_"+str(name+1)
+        self.joints.append(joint)
+
+        dir_pick = random.randint(0,2)
+        if dir_pick == 1:
+            dir = [0,.5,0]
+            pos = self.multiply(self.add(node[4],dir),node[2])
+        elif dir_pick == 2:
+            dir = [.5,0,0]
+            pos = self.multiply(self.add(node[4],dir),node[1])
+        else:
+            dir = [0,0,.5]
+            pos = self.multiply(self.add(node[4],dir),node[3])
+
+
+        pyrosim.Send_Joint(
+            name = joint, 
+            parent= str(name), 
+            child = str(name+1), 
+            type = "revolute", 
+            position = [pos[0], pos[1],pos[2]],jointAxis = self.joint_axs(dir))
+        pyrosim.Send_Cube(
+            name=str(name+1), 
+            pos= self.mult_some(dir,[length, width, height]),
+            size=[length, width, height], 
+            color_name=color_name, rgb=rgb)
+
+        self.nodes.append([name+1,length, width, height,dir])
+
+
+
+    def add(self,a,b):
+        return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]
+
+    def multiply(self,a,b):
+        return [a[0]*b,a[1]*b,a[2]*b]
+
+    def mult_some(self,a,b):
+        return [a[0]*b[0],a[1]*b[1],a[2]*b[2]]
+
+    def joint_axs(self,a):
+        if a == [.5,0,0]:
+            return "0 1 0"
+        else:
+            return "1 0 0"

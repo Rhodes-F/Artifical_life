@@ -14,6 +14,7 @@ class SIMULATION:
 
     def __init__(self, directOrGUI, solutionID):
         self.runType = directOrGUI
+        
         if self.runType == "DIRECT":
             self.physicsClient = p.connect(p.DIRECT)
         else:
