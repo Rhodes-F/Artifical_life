@@ -13,7 +13,7 @@ from links import Links
 class SOLUTION:
 
     def __init__(self, nextAvailableID):
-        self.seed = 5
+        self.seed = c.random_seed
         self.myID = nextAvailableID
         self.weights = np.random.rand(100,100)*2-1
         self.sensors = Links(self.seed).get_sensor()
@@ -77,14 +77,14 @@ class SOLUTION:
                     if cube.name == cube_change:
                         prev_dir = self.joints_to_send[i].prev_dir
                         cube.size = self.mult_some(cube.size,[random.random()*2, random.random()*2, random.random()*2])
-                        cube.pos = self.multiply(cube.size,prev_dir)
+                        cube.pos = self.mult_some(cube.size,prev_dir)
                         dir = self.joints_to_send[i].dir
                         if dir ==[0,.5,0]:
-                            pos = self.multiply(self.add(prev_dir,dir),cube[2])
+                            pos = self.multiply(self.add(prev_dir,dir),cube.size[1])
                         elif dir == [.5,0,0]:
-                            pos = self.multiply(self.add(prev_dir,dir),cube[1])
+                            pos = self.multiply(self.add(prev_dir,dir),cube.size[0])
                         else:
-                            pos = self.multiply(self.add(prev_dir,dir),cube[3])
+                            pos = self.multiply(self.add(prev_dir,dir),cube.size[2])
                         
                         self.joints_to_send[i].pos = pos
                                         
@@ -95,7 +95,7 @@ class SOLUTION:
         return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]
 
     def multiply(self,a,b):
-        return [a[0]*b,a[1]*b,a[2]*b]
+        return [a[0]*float(b),a[1]*float(b),a[2]*float(b)]
 
     def mult_some(self,a,b):
         return [a[0]*b[0],a[1]*b[1],a[2]*b[2]]

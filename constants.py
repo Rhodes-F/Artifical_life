@@ -17,7 +17,7 @@ MAXFORCE = 50
 
 SLEEP_TIME = 0.005
 
-NUM_GENERATIONS = 50
+NUM_GENERATIONS = 100
 
 POPULATION_SIZE = 10
 
@@ -31,3 +31,5 @@ motorJointRange = .5
 NUM_LINKS = 10 
 MAX_SIZE = 1 
 MIN_SIZE = .01
+
+random_seed = 13

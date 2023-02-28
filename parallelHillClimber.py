@@ -66,7 +66,9 @@ class PARALLEL_HILL_CLIMBER:
                 best_fitness = parent_fitness
 
         with open('fitnesses.csv','a') as fd:
-            fd.write(str(best_fitness)+','+'\n')
+            # fd.write(str(best_fitness)+','+'\n')
+            fd.write(str(best_fitness)+'\n')
+
 
     def Print(self):
         print()
