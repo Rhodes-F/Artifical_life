@@ -4,17 +4,27 @@ import os
 import random
 import time
 import constants as c
+from links import Links
+
+
 
 
 
 class SOLUTION:
 
     def __init__(self, nextAvailableID):
+        self.seed = 5
         self.myID = nextAvailableID
         self.weights = np.random.rand(100,100)*2-1
-        self.sensors = []
-        self.joints = []
-        self.nodes = []
+        self.sensors = Links(self.seed).get_sensor()
+        self.joints = Links(self.seed).get_joint()
+        self.nodes = Links(self.seed).get_node()
+        self.joints_to_send  = Links(self.seed).get_joints_to_send()
+        self.cubes_to_send = Links(self.seed).get_cubes_to_send()
+        random.seed(self.seed)
+        np.random.seed(self.seed)
+
+        self.links = Links(5)
 
     def Start_Simulation(self, directOrGUI):
         self.Create_Body()
@@ -34,9 +44,61 @@ class SOLUTION:
         os.system("rm " + fitnessFileName)
     
     def Mutate(self):
-        row1 = random.randint(0,c.numSensorNeurons-1)
-        col1 = random.randint(0,c.numMotorNeurons-1)
-        self.weights[row1, col1] = random.random()*2-1
+        num = random.random()
+        if num < 0.75:
+            row1 = random.randint(0,c.numSensorNeurons-1)
+            col1 = random.randint(0,c.numMotorNeurons-1)
+            self.weights[row1, col1] = random.random()*2-1
+        else:
+            nums = [0,1,2]
+            choice = random.choice(nums)
+            if choice == 0:
+                i = random.randint(0,len(self.cubes_to_send)-1)
+                cube = self.cubes_to_send[i]
+                if cube.name in self.sensors:
+                    self.sensors.remove(cube.name)
+                    self.cubes_to_send[i].color = "Blue"
+                    self.cubes_to_send[i].rgb = [0,0,1]
+                else:
+                    self.sensors.append(cube.name)
+                    self.cubes_to_send[i].color_name = "Green"
+                    self.cubes_to_send[i].rgb = [0,1,0]
+            elif choice ==1:
+                i = random.randint(0,len(self.joints_to_send)-1)
+                joint = self.joints_to_send[i]
+                if joint.jointAxis == "0 1 0":
+                    self.joints_to_send[i].jointAxis = "1 0 0"
+                else:
+                    self.joints_to_send[i].jointAxis = "0 1 0"
+            elif choice ==2:
+                i = random.randint(0,len(self.joints_to_send)-1)
+                cube_change = self.joints_to_send[i].parent
+                for cube in self.cubes_to_send:
+                    if cube.name == cube_change:
+                        prev_dir = self.joints_to_send[i].prev_dir
+                        cube.size = self.mult_some(cube.size,[random.random()*2, random.random()*2, random.random()*2])
+                        cube.pos = self.multiply(cube.size,prev_dir)
+                        dir = self.joints_to_send[i].dir
+                        if dir ==[0,.5,0]:
+                            pos = self.multiply(self.add(prev_dir,dir),cube[2])
+                        elif dir == [.5,0,0]:
+                            pos = self.multiply(self.add(prev_dir,dir),cube[1])
+                        else:
+                            pos = self.multiply(self.add(prev_dir,dir),cube[3])
+                        
+                        self.joints_to_send[i].pos = pos
+                                        
+
+
+                
+    def add(self,a,b):
+        return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]
+
+    def multiply(self,a,b):
+        return [a[0]*b,a[1]*b,a[2]*b]
+
+    def mult_some(self,a,b):
+        return [a[0]*b[0],a[1]*b[1],a[2]*b[2]]
 
     def Set_ID(self, newID):
         self.myID = newID
@@ -51,26 +113,15 @@ class SOLUTION:
         # pyrosim.End()     
 
     def Create_Body(self):
-        start_heigth= random.random()*c.MAX_SIZE+c.MIN_SIZE
-        start_y = random.random()*c.MAX_SIZE+c.MIN_SIZE
-        start_x = random.random()*c.MAX_SIZE+c.MIN_SIZE
-        pyrosim.Start_URDF("body.urdf")
+        pyrosim.Start_URDF("body" + str(self.myID) + ".urdf")
 
-        color_name = "Blue"
-        rgb = [0,0,1]
-        if random.randint(0,1) == 1:
-            self.sensors.append("0")
-            color_name = "Green"
-            rgb = [0,1,0]
-        pyrosim.Send_Cube(name="0", pos=[0, 0, start_heigth/2] , 
-        size=[start_x, start_y, start_heigth ], color_name=color_name, rgb=rgb)
         
-        links = random.randint(1,c.NUM_LINKS)
-        self.nodes.append([0,start_x, start_y, start_heigth,[0,0,0]])
+        joints, cubes = self.joints_to_send, self.cubes_to_send
 
-        for i in range(10):
-            self.make_node()
-
+        for joint in joints:
+            pyrosim.Send_Joint(name = joint.name, parent = joint.parent, child = joint.child, type = joint.type, position = joint.position, jointAxis = joint.jointAxis)
+        for cube in cubes:
+            pyrosim.Send_Cube(name = cube.name, pos = cube.pos, size = cube.size, color_name = cube.color_name, rgb = cube.rgb)
         pyrosim.End()
 
     def Create_Brain(self):
@@ -90,59 +141,3 @@ class SOLUTION:
 
         pyrosim.End()
 
-    def make_node(self):
-        node  = self.nodes.pop()
-        name = node[0]
-
-        color_name = "Blue"
-        rgb = [0,0,1]
-        length, width, height = random.random()*c.MAX_SIZE+c.MIN_SIZE,random.random()*c.MAX_SIZE+c.MIN_SIZE,random.random()*c.MAX_SIZE+c.MIN_SIZE
-        if random.randint(0,1) == 1:
-            self.sensors.append(str(name+1))
-            color_name = "Green"   
-            rgb = [0,1,0]
-        joint = str(name)+"_"+str(name+1)
-        self.joints.append(joint)
-
-        dir_pick = random.randint(0,2)
-        if dir_pick == 1:
-            dir = [0,.5,0]
-            pos = self.multiply(self.add(node[4],dir),node[2])
-        elif dir_pick == 2:
-            dir = [.5,0,0]
-            pos = self.multiply(self.add(node[4],dir),node[1])
-        else:
-            dir = [0,0,.5]
-            pos = self.multiply(self.add(node[4],dir),node[3])
-
-
-        pyrosim.Send_Joint(
-            name = joint, 
-            parent= str(name), 
-            child = str(name+1), 
-            type = "revolute", 
-            position = [pos[0], pos[1],pos[2]],jointAxis = self.joint_axs(dir))
-        pyrosim.Send_Cube(
-            name=str(name+1), 
-            pos= self.mult_some(dir,[length, width, height]),
-            size=[length, width, height], 
-            color_name=color_name, rgb=rgb)
-
-        self.nodes.append([name+1,length, width, height,dir])
-
-
-
-    def add(self,a,b):
-        return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]
-
-    def multiply(self,a,b):
-        return [a[0]*b,a[1]*b,a[2]*b]
-
-    def mult_some(self,a,b):
-        return [a[0]*b[0],a[1]*b[1],a[2]*b[2]]
-
-    def joint_axs(self,a):
-        if a == [.5,0,0]:
-            return "0 1 0"
-        else:
-            return "1 0 0"

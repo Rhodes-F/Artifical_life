@@ -9,15 +9,21 @@ import constants as c
 class ROBOT:
 
     def __init__(self, solutionID):
-        self.robotId = p.loadURDF("body.urdf")
+        
         self.solutionID = solutionID
+        bodyFile = "body" + str(self.solutionID) + ".urdf"
+        brainFile = "brain" + str(self.solutionID) + ".nndf"
+        self.nn = NEURAL_NETWORK(brainFile)
+        self.robotId = p.loadURDF(bodyFile)
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
-
+        bodyFile = "body" + str(self.solutionID) + ".urdf"
         brainFile = "brain" + str(self.solutionID) + ".nndf"
         self.nn = NEURAL_NETWORK(brainFile)
+        self.robotId = p.loadURDF(bodyFile)
         os.system("rm " + brainFile)
+        os.system("rm " + bodyFile)
 
     def Prepare_To_Sense(self):
         self.sensors = {}
@@ -50,7 +56,7 @@ class ROBOT:
     def Get_Fitness(self):
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
         basePosition = basePositionAndOrientation[0]
-        xPosition = basePosition[2]
+        xPosition = basePosition[0]
         tmpFileName = "tmp" + str(self.solutionID) + ".txt"
         fitnessFileName = "fitness" + str(self.solutionID) + ".txt"
         file = open(tmpFileName, "w")

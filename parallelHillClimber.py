@@ -9,6 +9,7 @@ class PARALLEL_HILL_CLIMBER:
     def __init__(self):
         os.system("rm brain*.nndf")
         os.system("rm fitness*.txt")
+        os.system('rm fitnesses.csv')
 
         self.parents = {}
         self.nextAvailableID = 0
@@ -54,8 +55,18 @@ class PARALLEL_HILL_CLIMBER:
 
     def Select(self):
         for key in self.children:
-            if self.parents[key].Get_Fitness() < self.children[key].Get_Fitness():
+            if self.parents[key].Get_Fitness() > self.children[key].Get_Fitness():
                 self.parents[key] = self.children[key]
+
+
+        best_fitness = 1000000
+        for key in self.parents:
+            parent_fitness = self.parents[key].Get_Fitness()
+            if parent_fitness < best_fitness:
+                best_fitness = parent_fitness
+
+        with open('fitnesses.csv','a') as fd:
+            fd.write(str(best_fitness)+','+'\n')
 
     def Print(self):
         print()
@@ -64,13 +75,15 @@ class PARALLEL_HILL_CLIMBER:
         print()
 
     def Show_Best(self):
-        best_parent_key = "None"
-        best_fitness = -1000000
+        best_parent_key = 0
+        best_fitness = 1000000
         for key in self.parents:
             parent_fitness = self.parents[key].Get_Fitness()
-            if parent_fitness > best_fitness:
+            if parent_fitness < best_fitness:
                 best_fitness = parent_fitness
                 best_parent_key = key
 
         self.parents[best_parent_key].Start_Simulation("GUI")
         print("Best fitness: ", best_fitness)
+
+        

@@ -13,21 +13,21 @@ AMPLITUDE = math.pi/4
 FREQUENCY = 20
 OFFSET = 0
 
-MAXFORCE = 80
+MAXFORCE = .5
 
 SLEEP_TIME = 0.005
 
-NUM_GENERATIONS = 1
+NUM_GENERATIONS = 3
 
-POPULATION_SIZE = 1
+POPULATION_SIZE = 4
 
 
 numSensorNeurons = 6
 numMotorNeurons = 5
 
-motorJointRange = .4
+motorJointRange = .5
 
 # assignment 6
-NUM_LINKS = 5 
+NUM_LINKS = 10 
 MAX_SIZE = 1 
 MIN_SIZE = .01
