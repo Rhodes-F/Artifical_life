@@ -18,10 +18,6 @@ class ROBOT:
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
-        bodyFile = "body" + str(self.solutionID) + ".urdf"
-        brainFile = "brain" + str(self.solutionID) + ".nndf"
-        self.nn = NEURAL_NETWORK(brainFile)
-        self.robotId = p.loadURDF(bodyFile)
         os.system("rm " + brainFile)
         os.system("rm " + bodyFile)
 
