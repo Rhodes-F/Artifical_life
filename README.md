@@ -1,7 +1,7 @@
 ## Assignment 8
 
 #### Running the code
-Inorder to run this code first please clone the repository and enter the assignment7 branch. Then run main.py which will install the requirements and then run the search algorithm. The current search is set to run for 1 generation with a population size of 1 and have a maximum number of links of 10 with a max size being 1 and a min being .01 but this can be reconfigured in constants.py
+Inorder to run this code first please clone the repository and enter the assignment8 branch. Then run main.py which will install the requirements and then run the search algorithm. The current search is set to run for 1 generation with a population size of 1 and have a maximum number of links of 10 with a max size being 1 and a min being .01 but this can be reconfigured in constants.py
 
 #### Project info 
 This project is part of CS 396-Artificial life at Northwestern Universiy. It began as a Ludobots project which is a reddit course that can be found [here](https://www.reddit.com/r/ludobots/) and uses pyrosim physics simulator to make the world environment and determine the interactions in the world. 
@@ -28,8 +28,11 @@ The dots on the left represent sensors and the ones on the right are all the joi
 
 The final step that needed to be done in this assignment was mutating the brain and the body. The way this is done is detailed in the diagram below. Things to note here are that the mutations that can occur are brain mutations of the synaptice weights, or body mutations whcih included adding or removing a sensor on a node, changing the joint axis connecting to nodes or scaling a block by a random size from 0-2 times the original. The probabilities for each of these events are shown on the graph below as fractions.
 
+
+![image](IMG_5810 Medium.jpeg)
+
 #### Results
 
 Finally this ismulation was run 5 times each with different seeds 1,2,3,4,5 fo r100 generations with generation sizes of 10. The best fitness from each generation was recorded and plotted. The plot is below: 
 
-
+![image](Screen Shot 2023-02-28 at 8.45.17 PM.png)
