@@ -33,6 +33,8 @@ The final step that needed to be done in this assignment was mutating the brain 
 
 #### Results
 
-Finally this ismulation was run 5 times each with different seeds 1,2,3,4,5 fo r100 generations with generation sizes of 10. The best fitness from each generation was recorded and plotted. The plot is below: 
+Finally this ismulation was run 5 times each with different seeds 1,2,3,4,5 for 100 generations with generation sizes of 10. The best fitness from each generation was recorded and plotted. The plot is below: 
 
 ![image](FitFun.png)
+
+Note that thes seeds were actually randomly generated and seed 1 = 5, seed 2 = 10, seed 3 = 11, seed 4 = 12, and seed 5 = 13 if oyu wish to replicate the results
