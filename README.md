@@ -20,7 +20,7 @@ In this diagram the lines show the parent child connections, however, it must be
 #### Brain Generation 
 The simulation also generates a brain to opperate the robot. To do this each element of the body has a 50% chance of becoming a sensor if the element is a sensor it is then connected to each of the joints by a synapse with a random weight. An example brain is shown below. 
 
-![image](IMG_5773.jpeg | height = 50%)
+![image](IMG_5773.jpeg) 
 
 The dots on the left represent sensors and the ones on the right are all the joins in the robot. The lines running between them are synapses with random weights. 
 
@@ -30,5 +30,6 @@ The final step that needed to be done in this assignment was mutating the brain 
 
 #### Results
 
-Finally 
+Finally this ismulation was run 5 times each with different seeds 1,2,3,4,5 fo r100 generations with generation sizes of 10. The best fitness from each generation was recorded and plotted. The plot is below: 
+
 
