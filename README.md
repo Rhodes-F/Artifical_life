@@ -29,10 +29,10 @@ The dots on the left represent sensors and the ones on the right are all the joi
 The final step that needed to be done in this assignment was mutating the brain and the body. The way this is done is detailed in the diagram below. Things to note here are that the mutations that can occur are brain mutations of the synaptice weights, or body mutations whcih included adding or removing a sensor on a node, changing the joint axis connecting to nodes or scaling a block by a random size from 0-2 times the original. The probabilities for each of these events are shown on the graph below as fractions.
 
 
-![image](IMG_5810 Medium.jpeg)
+![image](IMG_5810.jpeg)
 
 #### Results
 
 Finally this ismulation was run 5 times each with different seeds 1,2,3,4,5 fo r100 generations with generation sizes of 10. The best fitness from each generation was recorded and plotted. The plot is below: 
 
-![image](Screen Shot 2023-02-28 at 8.45.17 PM.png)
+![image](FitFun.png)
