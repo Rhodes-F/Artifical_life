@@ -15,7 +15,7 @@ For this assignment, we created a body in 3 dimensions which randomly branched i
 
 ![image](body_pic.png)
 
-In this diagram the lines show the parent child connections, red circles show the joints between the blocks and blue or green block are links with either sensors or no sensors as mentioned above. 
+In this diagram the lines show the parent child connections, red circles show the joints between the blocks and blue or green block are links with either sensors or no sensors as mentioned above. Pleane note that the diagram is also in 2 dimensions but in the simlation this is done it 3 dimensions. This was done for simplicity of drawing. The code to make these bodies can be found in the links class which makes the genotype for the brain and body 
 
 #### Brain Generation 
 The simulation also generates a brain to opperate the robot. To do this each element of the body has a 50% chance of becoming a sensor if the element is a sensor it is then connected to each of the joints by a synapse with a random weight ranging from -1 to 1. An example brain is shown below. 
@@ -41,6 +41,8 @@ The final step that needed to be done in this assignment was mutating the brain 
 
 
 ![image](mutation_graph.png)
+
+This is done in solution.py in the mutate method. 
 
 #### Fitness 
 
