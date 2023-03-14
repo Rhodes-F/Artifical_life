@@ -13,44 +13,53 @@ This assignment was to create a 3D  creature. Green boxes denote sensors and blu
 For this assignment, we created a body in 3 dimensions which randomly branched in all directions. The way that this was accomplished was by first making a single root node. This node was then used as a parent node and children were added in random directions. Each direction was weighted evenly. Each of these nodes could also have either 1, 2 or 3 children however the probability of having 1 child was much larger than either 2 or 3. An example two dimensional body can be seen below. 
 
 
-![image](IMG_5774.jpeg)
+![image](body_pic.png)
 
 In this diagram the lines show the parent child connections, red circles show the joints between the blocks and blue or green block are links with either sensors or no sensors as mentioned above. 
 
 #### Brain Generation 
 The simulation also generates a brain to opperate the robot. To do this each element of the body has a 50% chance of becoming a sensor if the element is a sensor it is then connected to each of the joints by a synapse with a random weight ranging from -1 to 1. An example brain is shown below. 
 
-![image](IMG_5773.jpeg) 
+![image](brain_graph.png)
 
 The dots on the left represent sensors and the ones on the right are all the joins in the robot. The lines running between them are synapses with random weights. 
 #### Genotype and storage of the brain and body 
 
 The brain was stored in a n x m array which can be seen below:
 
+![image](brain_geno.png)
+
 Athoguh this was how it was stored in the computer, a graph will be used as a visual representation
 
 The body was stored in a two arrays. One 1 x i array where i is the number of cubes called links and another 1 x j array called joints where j is the number of joints. These two arrays contained all the information that was needed to make the body. 
+
+![image](body_geno.png)
+
 #### Mutation
 
 The final step that needed to be done in this assignment was mutating the brain and the body. The way this is done is detailed in the diagram below. Things to note here are that the mutations that can occur are brain mutations of a synaptic weight, or body mutations whcih included adding or removing a sensor on a node, changing the joint axis connecting to nodes or scaling a block by a random size from 0-2 times the original. The probabilities for each of these events are shown on the graph below as fractions.
 
 
-![image](IMG_5810.jpeg)
+![image](mutation_graph.png)
 
 #### Fitness 
 
 To determine fitness of the creatuures the distance traveled in the -x direction was tracked. This means that a more negative fitness is actually better. A diagram of this is shown below 
 
+![image](fit_epl.png)
+
 
 #### Example evolutionary run- prallel hill climber
 
  The digram below walks through a simplified evolutionary run with population size of 1 and number of generations set to 3. This diagram shows the parent, the mutation and the resulting child as well as the fitness of both of them. This digram also shows the hill climber algorithm which is when the parent and child compare fitnesses and the one with a better fitness becomes the parent for the next run of evolution.  To make this into a parallel hill climber you can just imagine that there are multiple rows of the same thing happening simultaniously but the rows do not intereact. 
+ 
+ ![image](example.png)
 
 #### Results
 
 Finally this smulation was run 10 times each with different seeds 1-10 for 500 generations with population sizes of 10. The best fitness from each generation was recorded and plotted. The plot is below: 
 
-![image](FitFun.png)
+![image](fit_fun_10.png)
 
 
 #### Discussion
