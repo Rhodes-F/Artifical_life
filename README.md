@@ -1,3 +1,5 @@
+![gif](seed 21.gif)
+
 ## Final project- The engineer route- 14 pts
 
 #### Running the code
