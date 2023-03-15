@@ -1,6 +1,7 @@
-![gif](seed 21.gif)
+![gif](seed21.gif)
 
 ## Final project- The engineer route- 14 pts
+to view more please view the full video [here](https://youtu.be/2EovXnrT6Cc)
 
 #### Running the code
 Inorder to run this code first please clone the repository and enter the FinalProject branch. Then run main.py which will install the requirements and then run the search algorithm. The current search is set to run for 1 generation with a population size of 1 and have a maximum number of links of 10 with a max size being 1 and a min being .01 but this can be reconfigured in constants.py. Each run is also deterministic and can be configured to get different results based on the current seed. Becuase of this, the only thing needed to recreate and store robots is the seed, so to get results that match my favorite robot in constants.py the seed should be set to 1 population size to 1 and number of generations to 500.
