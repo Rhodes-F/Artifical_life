@@ -5,12 +5,9 @@ to view more please view the full video [here](https://youtu.be/2EovXnrT6Cc)
 
 #### Running the code
 Inorder to run this code first please clone the repository and enter the FinalProject branch. Then run main.py which will install the requirements and then run the search algorithm. The current search is set to run for 1 generation with a population size of 1 and have a maximum number of links of 10 with a max size being 1 and a min being .01 but this can be reconfigured in constants.py. Each run is also deterministic and can be configured to get different results based on the current seed. Becuase of this, the only thing needed to recreate and store robots is the seed, so to get results that match my favorite robot in constants.py the seed should be set to 1 population size to 1 and number of generations to 500.
-#### Project info 
-
-This project is part of CS 396-Artificial life at Northwestern Universiy. It began as a Ludobots project which is a reddit course that can be found [here](https://www.reddit.com/r/ludobots/) and uses pyrosim physics simulator to make the world environment and determine the interactions in the world. 
 
 #### Overview 
-This assignment was to create a 3D  creature. Green boxes denote sensors and blue denotes sensorless boxes. These creatures and brains were then evolved using a parallel hill climber algorithm. More on all of this to come.  
+This project creates a 3D  creature. Green boxes denote sensors and blue denotes sensorless boxes. These creatures and brains were then evolved using a parallel hill climber algorithm. More on all of this to come.  
 
 #### Body Generation 
 For this assignment, we created a body in 3 dimensions which randomly branched in all directions. The way that this was accomplished was by first making a single root node. This node was then used as a parent node and children were added in random directions. Each direction was weighted evenly. Each of these nodes could also have either 1, 2 or 3 children however the probability of having 1 child was much larger than either 2 or 3. An example two dimensional body can be seen below. 
@@ -71,4 +68,7 @@ Finally this smulation was run 10 times each with different seeds 1-10 for 500 g
 
 As you can se in the plot above the fitnesses ranged form the best at -72 to the worst at -22 (lower fitness = better). Some things that I noticed were that smaller creatures and creatures with fewer links tended to perform better. This could be becuase of be motors have a predetermined strenght so as they grew the strength stayed constant and they could no longer move their bodies effectivly, althoguh this needs further testign to be sure. Another thing that I noticed was that most creatures started out increasing at a very fast rate but then woudl get stuck and very few large jumps would happen after about 200 generations. This is probably because at that point in evoltion only very small mutations woudl increase the fitness and anything larger would decreas it. This owudl result in fewer mutations and fitness increases becuase large and small mutations are equally likely. 
 
+#### Project info 
+
+This project is part of CS 396-Artificial life at Northwestern Universiy. It began as a Ludobots project which is a reddit course that can be found [here](https://www.reddit.com/r/ludobots/) and uses pyrosim physics simulator to make the world environment and determine the interactions in the world. 
 
