@@ -1,6 +1,6 @@
 ![gif](seed21.gif)
 
-## Final project- The engineer route
+## Final project
 to view more please view the full video [here](https://youtu.be/2EovXnrT6Cc)
 
 #### Running the code
